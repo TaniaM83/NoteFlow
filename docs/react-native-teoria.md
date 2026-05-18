@@ -190,3 +190,56 @@ app/
     checklists/          (misma estructura) -> /checklists
     ideas/               (misma estructura) -> /ideas
 ```
+
+## 6. Modelado de datos y type guards
+
+Los tres tipos de contenido comparten unos campos comunes, así que el
+modelo (en `types/index.ts`) parte de una interfaz base y la extiende:
+
+- `BaseNote`: `id`, `title`, `createdAt`, `updatedAt`.
+- `Note extends BaseNote`: añade `content` (texto libre).
+- `ChecklistNote extends BaseNote`: añade `items: ChecklistItem[]`.
+- `IdeaNote extends BaseNote`: añade `tags: string[]` y `color`.
+
+### El tipo unión `AnyNote`
+
+```ts
+type AnyNote = Note | ChecklistNote | IdeaNote;
+```
+
+`AnyNote` permite escribir una sola vez funciones que valgan para
+cualquier nota (stores de Zustand, listas con FlashList, utilidades de
+ordenación/búsqueda) sin duplicar lógica por tipo.
+
+### Por qué hacen falta type guards
+
+TypeScript solo existe en tiempo de **compilación**: los tipos se borran
+al transpilar, así que en **ejecución** una variable `AnyNote` no "sabe"
+cuál de los tres tipos es. Si intentamos acceder a `note.items`,
+TypeScript lo impide porque no todas las variantes lo tienen.
+
+La solución es un **type guard**: una función cuyo tipo de retorno es un
+*predicado de tipo* (`note is ChecklistNote`). Internamente comprueba la
+propiedad distintiva con el operador `in`:
+
+```ts
+function isChecklistNote(note: AnyNote): note is ChecklistNote {
+  return 'items' in note;
+}
+```
+
+`'items' in note` devuelve `true` solo si esa propiedad existe en el
+objeto, es decir, solo para `ChecklistNote`. Cuando el predicado se
+cumple, TypeScript **estrecha** (`narrowing`) el tipo dentro del bloque:
+
+```ts
+if (isChecklistNote(note)) {
+  // Aquí `note` es ChecklistNote: `note.items` está disponible y tipado.
+  const total = note.items.length;
+}
+```
+
+En `types/index.ts` hay un guard por tipo: `isNote` (`'content' in note`),
+`isChecklistNote` (`'items' in note`) e `isIdeaNote` (`'tags' in note`).
+Así el código que recorre listas mixtas puede decidir, de forma segura y
+con autocompletado, cómo renderizar o procesar cada nota.
