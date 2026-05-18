@@ -89,7 +89,56 @@ estado, persistencia, UI) es compatible con Expo Go; el salto a Development
 Build se haría al añadir, por ejemplo, notificaciones push para recordatorios
 de tareas.
 
+## 4. Sistemas de diseño
+
+Un **sistema de diseño** es el conjunto de decisiones visuales reutilizables
+(color, tipografía, espaciado, radios, componentes) expresadas como *tokens*
+y componentes, en lugar de valores sueltos repartidos por el código. Sus
+ventajas: coherencia visual, cambios globales en un único sitio y soporte
+sistemático de variantes como el modo claro/oscuro.
+
+### Comparativa: Gluestack UI vs. React Native Paper
+
+| Criterio              | Gluestack UI                                  | React Native Paper                              |
+| --------------------- | --------------------------------------------- | ----------------------------------------------- |
+| Filosofía             | Utilidades/tokens (estilo Tailwind), headless | Material Design de Google, opinado               |
+| Personalización       | Alta: identidad visual propia                 | Media: se sale del look Material con esfuerzo    |
+| Aspecto por defecto   | Neutro, se adapta a la marca                  | Material (muy reconocible como "Android")        |
+| Modo claro/oscuro     | `colorMode` en el provider + tokens propios   | Temas `MD3LightTheme` / `MD3DarkTheme`           |
+| Ideal para            | Productos con identidad visual única          | Apps que quieren Material listo para usar        |
+
+### Elección para NoteFlow: **Gluestack UI**
+
+Se elige **Gluestack UI** por estas razones:
+
+1. **Identidad propia, no Material.** NoteFlow tiene tres tipos de contenido
+   (notas, tareas, ideas) con acentos de color diferenciados. Un sistema de
+   tokens flexible expresa esa identidad mejor que imponer Material Design.
+2. **Tokens como fuente de verdad.** Encaja con la decisión de arquitectura
+   de centralizar el diseño en `constants/theme.ts` y prohibir colores
+   hardcodeados (ver `.cursorrules`).
+3. **Modo claro/oscuro de primera clase.** El `colorMode` del
+   `GluestackUIProvider` se sincroniza con `useColorScheme`, y nuestras
+   paletas `light`/`dark` comparten las mismas claves, por lo que cambiar de
+   modo no requiere lógica adicional en los componentes.
+4. **Personalización sin pelear contra el framework.** Al ser headless/
+   utilitario, ampliar o ajustar componentes no implica sobrescribir un tema
+   Material rígido.
+
+React Native Paper sería preferible si el objetivo fuera entregar rápido una
+app con aspecto Android estándar; no es el caso de NoteFlow.
+
+### Implementación en el proyecto
+
+- `constants/theme.ts`: tokens de NoteFlow — paletas `light`/`dark` (con
+  acentos por tipo de contenido), escala tipográfica, espaciado (rejilla de
+  4 px) y radios. Expone el hook `useTheme()`, que devuelve el tema activo
+  según `useColorScheme`.
+- `app/_layout.tsx`: envuelve la app en `GluestackUIProvider` y enlaza su
+  `colorMode` con la preferencia del sistema.
+- Los componentes consumen siempre los tokens (vía `useTheme` o los
+  componentes de Gluestack), nunca valores literales.
+
 ---
 
-> Las secciones de **Sistemas de diseño** y **Navegación** se añaden en sus
-> fases correspondientes.
+> La sección de **Navegación** se añade en su fase correspondiente.

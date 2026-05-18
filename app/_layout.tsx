@@ -1,18 +1,24 @@
+import { config } from '@gluestack-ui/config';
+import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useColorScheme } from 'react-native';
 
 /**
  * Layout raíz de la aplicación.
  *
- * En esta fase solo declara un Stack base. La navegación por pestañas
- * (Notas / Tareas / Ideas) y la ruta modal de creación se añaden en la
- * fase de navegación.
+ * Envuelve toda la app en el `GluestackUIProvider` (sistema de diseño) y
+ * sincroniza su `colorMode` con la preferencia de modo claro/oscuro del
+ * sistema operativo mediante `useColorScheme`.
  */
 export default function RootLayout() {
+  const scheme = useColorScheme();
+  const colorMode = scheme === 'dark' ? 'dark' : 'light';
+
   return (
-    <>
+    <GluestackUIProvider config={config} colorMode={colorMode}>
       <Stack screenOptions={{ headerShown: false }} />
-      <StatusBar style="auto" />
-    </>
+      <StatusBar style={colorMode === 'dark' ? 'light' : 'dark'} />
+    </GluestackUIProvider>
   );
 }
