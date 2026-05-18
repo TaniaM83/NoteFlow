@@ -1,0 +1,74 @@
+# NoteFlow — Reglas de IA (Cursor)
+
+Eres un asistente de desarrollo para **NoteFlow**, una app móvil de
+productividad. Sigue estas reglas en todo el código que generes o edites.
+
+## Contexto del proyecto
+
+NoteFlow unifica tres tipos de contenido: notas de texto, tareas
+(checklists) e ideas rápidas con etiquetas. Es offline-first, sin backend
+ni cuentas: todo se persiste en el dispositivo. Detalle funcional en
+`docs/idea.md`.
+
+## Stack (no introducir alternativas sin justificación)
+
+- React Native con **Expo SDK** (managed workflow).
+- **TypeScript** estricto. Nada de `any` salvo justificación explícita.
+- **Expo Router** para navegación (file-based routing, carpeta `app/`).
+- **Gluestack UI** como librería de componentes y sistema de diseño.
+- **Shopify FlashList** para todas las listas con datos dinámicos
+  (nunca `FlatList` ni `.map()` para listas largas).
+- **Zustand** para el estado global.
+- **AsyncStorage** para la persistencia (vía middleware `persist` de
+  Zustand).
+
+## Estructura de carpetas
+
+```
+app/         Rutas Expo Router (incluye (tabs)/ y rutas modales)
+components/   Componentes reutilizables y presentacionales
+store/        Stores de Zustand (uno por dominio: notes, checklists, ideas)
+types/        Tipos e interfaces TypeScript compartidos
+constants/    Tokens de diseño (theme.ts) y constantes
+docs/         Documentación
+```
+
+- La lógica de negocio vive en `store/`, no en los componentes.
+- Los componentes de `app/` son pantallas; lo reutilizable va a
+  `components/`.
+
+## Estilo de código
+
+- Componentes funcionales con hooks. Nada de componentes de clase.
+- `function NombreComponente()` con export nombrado para componentes
+  reutilizables; `export default` solo en archivos de ruta de Expo Router.
+- Nombres: componentes en `PascalCase`, hooks `useCamelCase`, variables y
+  funciones en `camelCase`, tipos/interfaces en `PascalCase`, constantes
+  globales en `UPPER_SNAKE_CASE`. Archivos de rutas siguen la convención
+  de Expo Router (`[id].tsx`, `_layout.tsx`).
+- Tipar props con `interface` explícita; no usar `React.FC`.
+- Estilos con los componentes/utilidades de Gluestack UI; evitar
+  `StyleSheet` salvo casos puntuales. Nunca colores hardcodeados: usar
+  los tokens de `constants/theme.ts`.
+- Imports ordenados: librerías externas, luego internos por alias/ruta.
+- Strings de UI en español (idioma del producto).
+
+## Restricciones de arquitectura
+
+- Offline-first: no añadir llamadas de red, SDKs de backend ni
+  autenticación.
+- No acceder a AsyncStorage directamente desde componentes; pasa siempre
+  por el store.
+- Soportar modo claro y oscuro mediante `useColorScheme`; no asumir un
+  único tema.
+- No introducir nuevas dependencias pesadas sin justificarlo.
+- Mantener accesibilidad básica (labels, `accessibilityRole`) en
+  componentes interactivos.
+- No romper el tipado: el código debe compilar con TypeScript estricto.
+
+## Al generar código
+
+- Prioriza soluciones simples y legibles sobre abstracciones prematuras.
+- Reutiliza componentes y tipos existentes antes de crear nuevos.
+- Si una petición contradice estas reglas, indícalo en lugar de
+  ignorarlas.

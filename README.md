@@ -34,6 +34,7 @@ Detalle del flujo y de las tarjetas en
 
 - [Definición de la idea](docs/idea.md)
 - [Gestión del proyecto](docs/project-management.md)
+- [Configuración de herramientas de IA](docs/ai-setup.md)
 
 ## Estructura prevista
 
