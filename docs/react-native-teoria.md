@@ -139,6 +139,54 @@ app con aspecto Android estándar; no es el caso de NoteFlow.
 - Los componentes consumen siempre los tokens (vía `useTheme` o los
   componentes de Gluestack), nunca valores literales.
 
----
+## 5. Navegación: Tabs, Stack y modales
 
-> La sección de **Navegación** se añade en su fase correspondiente.
+Expo Router define las rutas a partir del **sistema de archivos**: cada
+archivo dentro de `app/` es una ruta. Carpetas entre paréntesis como
+`(tabs)` son *grupos*: organizan archivos sin añadir segmento a la URL.
+
+### Los tres patrones
+
+| Patrón     | Qué resuelve                                                   | En NoteFlow                                              |
+| ---------- | -------------------------------------------------------------- | -------------------------------------------------------- |
+| **Tabs**   | Secciones de **igual jerarquía** entre las que se salta libremente, manteniendo el estado de cada una. | Notas / Tareas / Ideas: tres áreas paralelas del producto. |
+| **Stack**  | Navegación **jerárquica**: avanzar a un detalle y volver atrás, apilando pantallas. | Dentro de cada pestaña: listado → detalle `[id]`.        |
+| **Modal**  | Tarea **puntual y autocontenida** superpuesta al flujo actual; se completa o se cancela y se vuelve donde se estaba. | Creación de contenido (`nueva-note`).                     |
+
+### Por qué cada uno en este proyecto
+
+- **Tabs para las tres secciones:** notas, tareas e ideas son funciones
+  independientes y de igual importancia; el usuario alterna entre ellas con
+  frecuencia. Las pestañas dan acceso constante de un toque y conservan el
+  estado de cada sección. Implementado en `app/(tabs)/_layout.tsx` con
+  iconos de `@expo/vector-icons`.
+
+- **Stack dentro de cada pestaña:** ver el detalle de un elemento es una
+  relación padre→hijo (lista → elemento). Cada pestaña tiene su propia pila
+  (`app/(tabs)/notas/_layout.tsx`, etc.) para que entrar al detalle en una
+  pestaña no afecte al estado de las otras, y el gesto/botón "atrás"
+  funcione de forma natural. Las rutas dinámicas `[id].tsx` reciben el
+  identificador con `useLocalSearchParams`.
+
+- **Modal para crear:** crear contenido no es un destino dentro de la
+  jerarquía, sino una acción transversal que puede lanzarse desde cualquier
+  pestaña. Un modal comunica visualmente "esto es temporal: termínalo o
+  ciérralo". Se declara en el Stack raíz (`app/_layout.tsx`) con
+  `presentation: 'modal'` y vive en `app/nueva-note.tsx`.
+
+### Estructura de rutas resultante
+
+```
+app/
+  _layout.tsx            Stack raíz: (tabs) + modal nueva-note
+  index.tsx              Redirige a /notas
+  nueva-note.tsx         Modal de creación
+  (tabs)/
+    _layout.tsx          Tabs (Notas / Tareas / Ideas)
+    notas/
+      _layout.tsx        Stack de la pestaña
+      index.tsx          Listado            -> /notas
+      [id].tsx           Detalle dinámico   -> /notas/123
+    checklists/          (misma estructura) -> /checklists
+    ideas/               (misma estructura) -> /ideas
+```

@@ -36,6 +36,12 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# IDE
+.idea/
+
+# bundle export check (verificación local)
+.expo-export-check/
+
 # generated native folders
 /ios
 /android
