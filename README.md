@@ -35,6 +35,14 @@ Detalle del flujo y de las tarjetas en
 - [Definición de la idea](docs/idea.md)
 - [Gestión del proyecto](docs/project-management.md)
 - [Configuración de herramientas de IA](docs/ai-setup.md)
+- [React Native — teoría](docs/react-native-teoria.md)
+
+## Desarrollo
+
+```bash
+npm install
+npm start      # abre Metro; pulsa a / i / w para Android / iOS / web
+```
 
 ## Estructura prevista
 
