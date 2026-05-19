@@ -4,7 +4,6 @@ import { Link, useRouter } from 'expo-router';
 import { contentAccents, type ContentType, useTheme } from '../constants/theme';
 import { ScreenContainer } from './ScreenContainer';
 
-/** Segmento de ruta de cada tipo de contenido (el de Tareas es /checklists). */
 const routeByType: Record<ContentType, string> = {
   notas: 'notas',
   tareas: 'checklists',
@@ -16,20 +15,12 @@ interface ContentListScreenProps {
   title: string;
 }
 
-/**
- * Pantalla de listado reutilizable para los tres tipos de contenido.
- *
- * Demuestra la navegación dentro de la pila de la pestaña (hacia el
- * detalle `[id]`) y la apertura del modal de creación. El listado real
- * con FlashList y datos de Zustand se implementa en una fase posterior.
- */
 export function ContentListScreen({ type, title }: ContentListScreenProps) {
   const theme = useTheme();
   const router = useRouter();
   const accent = contentAccents[type];
   const routeBase = routeByType[type];
 
-  // Datos de ejemplo hasta integrar el store.
   const sample = [1, 2, 3];
 
   return (

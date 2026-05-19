@@ -1,23 +1,13 @@
-/**
- * Tokens de diseño de NoteFlow.
- *
- * Fuente única de verdad para color, tipografía y espaciado. Ningún
- * componente debe hardcodear valores: siempre se consumen desde aquí
- * (directamente o vía el hook `useTheme`).
- */
-
 import { useColorScheme } from 'react-native';
 
-/** Acentos por tipo de contenido (coherentes en claro y oscuro). */
 export const contentAccents = {
-  notas: '#3B82F6', // azul
-  tareas: '#22C55E', // verde
-  ideas: '#F59E0B', // ámbar
+  notas: '#3B82F6',
+  tareas: '#22C55E',
+  ideas: '#F59E0B',
 } as const;
 
 export type ContentType = keyof typeof contentAccents;
 
-/** Forma de una paleta de color. Ambas (clara/oscura) comparten claves. */
 export interface Palette {
   background: string;
   surface: string;
@@ -34,7 +24,6 @@ export interface Palette {
   ideas: string;
 }
 
-/** Paleta para el modo claro. */
 const lightColors: Palette = {
   background: '#FFFFFF',
   surface: '#F4F4F5',
@@ -49,7 +38,6 @@ const lightColors: Palette = {
   ...contentAccents,
 };
 
-/** Paleta para el modo oscuro (mismas claves que la clara). */
 const darkColors: Palette = {
   background: '#0B0B0F',
   surface: '#18181B',
@@ -67,7 +55,6 @@ const darkColors: Palette = {
 export const palettes = { light: lightColors, dark: darkColors } as const;
 export type ColorMode = keyof typeof palettes;
 
-/** Escala tipográfica. */
 export const typography = {
   fontSize: {
     xs: 12,
@@ -91,7 +78,6 @@ export const typography = {
   },
 } as const;
 
-/** Escala de espaciado, basada en una rejilla de 4 px. */
 export const spacing = {
   xs: 4,
   sm: 8,
@@ -102,7 +88,6 @@ export const spacing = {
   '3xl': 48,
 } as const;
 
-/** Radios de borde. */
 export const radii = {
   sm: 6,
   md: 10,
@@ -118,11 +103,6 @@ export interface Theme {
   radii: typeof radii;
 }
 
-/**
- * Devuelve el tema activo según la preferencia del sistema
- * (`useColorScheme`). Reacciona automáticamente a los cambios de modo
- * claro/oscuro del dispositivo.
- */
 export function useTheme(): Theme {
   const scheme = useColorScheme();
   const mode: ColorMode = scheme === 'dark' ? 'dark' : 'light';

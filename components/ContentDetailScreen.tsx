@@ -9,11 +9,6 @@ interface ContentDetailScreenProps {
   title: string;
 }
 
-/**
- * Pantalla de detalle reutilizable. Lee el parámetro dinámico `id` de la
- * ruta (`[id].tsx`) con `useLocalSearchParams`. El contenido real se
- * cargará desde el store en una fase posterior.
- */
 export function ContentDetailScreen({ type, title }: ContentDetailScreenProps) {
   const theme = useTheme();
   const { id } = useLocalSearchParams<{ id: string }>();

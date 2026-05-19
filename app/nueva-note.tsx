@@ -10,15 +10,6 @@ import { useRouter } from 'expo-router';
 import { ScreenContainer } from '../components/ScreenContainer';
 import { useTheme } from '../constants/theme';
 
-/**
- * Pantalla de creación de contenido, presentada como **modal** (ver
- * `presentation: 'modal'` en `app/_layout.tsx`).
- *
- * Un modal es adecuado aquí porque crear es una tarea puntual y
- * autocontenida: interrumpe el flujo, se completa o se cancela y se
- * vuelve exactamente a donde se estaba. El formulario real y el guardado
- * en el store se implementan en una fase posterior.
- */
 export default function NuevaNoteModal() {
   const theme = useTheme();
   const router = useRouter();

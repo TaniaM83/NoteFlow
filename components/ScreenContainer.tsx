@@ -6,14 +6,9 @@ import { useTheme } from '../constants/theme';
 
 interface ScreenContainerProps {
   children: ReactNode;
-  /** Centra el contenido vertical y horizontalmente. */
   centered?: boolean;
 }
 
-/**
- * Contenedor base de pantalla: aplica el color de fondo del tema y el
- * área segura. Evita repetir este boilerplate en cada pantalla.
- */
 export function ScreenContainer({ children, centered }: ScreenContainerProps) {
   const theme = useTheme();
 

@@ -2,7 +2,6 @@ import { Stack } from 'expo-router';
 
 import { useTheme } from '../../../constants/theme';
 
-/** Pila (Stack) de la pestaña Tareas: listado -> detalle. */
 export default function ChecklistsStackLayout() {
   const theme = useTheme();
 

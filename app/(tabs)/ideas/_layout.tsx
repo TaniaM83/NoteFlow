@@ -2,7 +2,6 @@ import { Stack } from 'expo-router';
 
 import { useTheme } from '../../../constants/theme';
 
-/** Pila (Stack) de la pestaña Ideas: listado -> detalle. */
 export default function IdeasStackLayout() {
   const theme = useTheme();
 

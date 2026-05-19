@@ -3,13 +3,6 @@ import { Tabs } from 'expo-router';
 
 import { useTheme } from '../../constants/theme';
 
-/**
- * Navegación principal por **pestañas** (Tabs).
- *
- * Tres secciones independientes y de igual jerarquía: Notas, Tareas e
- * Ideas. Cada pestaña es una pila (Stack) propia, de modo que navegar al
- * detalle de un elemento no afecta a las otras pestañas.
- */
 export default function TabsLayout() {
   const theme = useTheme();
 
